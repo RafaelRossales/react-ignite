@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const isDevelopment = process.env.NODE_ENV != 'production';
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 
 // Configuranções da aplicação
 module.exports = {
@@ -16,21 +17,30 @@ module.exports = {
         extensions:['.js','.jsx']
     },
     plugins:[
+        isDevelopment && new ReactRefreshWebpackPlugin(),
         new HtmlWebpackPlugin({
             template:path.resolve(__dirname,'public','index.html')
         })
-    ],
+    ].filter(Boolean),
     devServer:{
         static: {
             directory: path.resolve(__dirname, "public"),
         },
+        hot:true
     },
     module:{
         rules:[
             {
                 test:/\.jsx$/, // verifica o tipo do arquivo
                 exclude:/node_modules/,
-                use:'babel-loader'
+                use:{
+                    loader:'babel-loader',
+                    options:{
+                        plugins:[
+                            isDevelopment && require.resolve('react-refresh/babel')
+                        ].filter(Boolean)
+                    }
+                }
             },
             {
                 test:/\.scss$/, // verifica o tipo do arquivo
