@@ -2,14 +2,16 @@ import { useState, useEffect } from 'react';
 import { RepositoryItem } from "./RepositoryItem";
 import '../styles/repositories.scss'
 
-const repository = {
-    name:'undefined',
-    description:'testando',
-    link:'https://github.com/janascher/01-github-explorer'
+
+
+interface Repository{
+    name:string,
+    description:string,
+    html_url:string
 }
 export function RepositoryList(){
 
-    const [respositories, setRepositories] = useState([],)
+    const [respositories, setRepositories] = useState<Repository[]>([])
 
     // Nunca esquecer de passar o segundio parâmetro
     // Se nao passar  a funcao entrará em loop
